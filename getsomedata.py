@@ -9,13 +9,14 @@ from datetime import date,timedelta
 class LNTextRetriever:
 
     # premenne 
-    global archiv_url, beggining_tag, ending_tag 
+    global archiv_url, beggining_tag, ending_tag, debug
 
     archiv_url = r"http://www.lidovky.cz/ln_noviny.asp?c=A", r"_ln_noviny_sko"
     #beggining_tag = "<!--FULLTEXTSTART-->"
     beggining_tag =  r'<div class="text bbtext">'
     ending_tag = r"<!--INTEXTSTOP-->"
-         
+    debug = 1;
+    
 
     def get_article_text(self,article_url,name):
 
@@ -27,8 +28,15 @@ class LNTextRetriever:
         b = content.rfind(beggining_tag)
         e = content.rfind(ending_tag)
         
-        content = content[b:e]
-
+        if(debug) :
+            print("URL - " + article_url)
+            print("Name - " + name)
+            print("Start - " + str(b) + "\nEnd - " + str(e))
+            
+        if(b==-1 or e==-1):
+            print("Arcticle num. " + name + " missing")
+            return 0
+        content = content[b:e]	
         content = re.sub("<[^>]*>",' ',content) # oreze vsetky tagy z textu
         content = re.sub("Pokračování na straně [0-9]+",' ',content) # oreze vety, ktore zostali z tlacenej podoby novin
         content = re.sub("Dokončení ze strany [0-9]+",' ',content) # oreze vety, ktore zostali z tlacenej podoby novin
@@ -63,8 +71,8 @@ retriever = LNTextRetriever()
 daydate = date.today() - timedelta(3)
 #print(retriever.get_url(daydate,11))
 
-for i in range(2,15) :
+for i in range(170,180) :
     name = str(i).zfill(3)
-    name = 'test' + name
+    name = './streda/test' + name
     retriever.get_article_text(retriever.get_url(daydate,i),name)
     
