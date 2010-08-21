@@ -20,8 +20,8 @@ class LNTextRetriever:
     def get_article_text(self,article_url,name):
 
         name = str(name) + ".txt"	
-        urllib.request.urlretrieve(article_url, name)
-        f = open(name, encoding='cp1250')
+        urllib.request.urlretrieve(article_url, "temp.txt")
+        f = open("temp.txt", encoding='cp1250')
         content = f.read()
         
         b = content.rfind(beggining_tag)
@@ -37,8 +37,13 @@ class LNTextRetriever:
         content = re.sub(" čtk ",' ',content) # oreze pripadnu zmienku o CTK na konci clanku
 
         content = re.sub("[\*]+",' ',content) # oreze hviezdicky, ktore sa obcas v texte vyskytuju
-	
-	r.
+                
+        f.close()
+        
+        out = open(name, 'w')
+        out.write(content)
+        out.close()
+        
         return content
 
     def get_lndate(self,daydate):
@@ -55,10 +60,11 @@ class LNTextRetriever:
 retriever = LNTextRetriever()
 #print(retriever.get_article_text())
 
-daydate = date.today() - timedelta(1)
+daydate = date.today() - timedelta(3)
 #print(retriever.get_url(daydate,11))
 
-for i in range(20):
+for i in range(2,15) :
     name = str(i).zfill(3)
-    name = 'pokus/test_' + name
+    name = 'test' + name
+    retriever.get_article_text(retriever.get_url(daydate,i),name)
     
