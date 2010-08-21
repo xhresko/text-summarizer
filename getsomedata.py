@@ -37,7 +37,8 @@ class LNTextRetriever:
         content = re.sub(" čtk ",' ',content) # oreze pripadnu zmienku o CTK na konci clanku
 
         content = re.sub("[\*]+",' ',content) # oreze hviezdicky, ktore sa obcas v texte vyskytuju
-
+	
+	r.
         return content
 
     def get_lndate(self,daydate):
@@ -55,5 +56,9 @@ retriever = LNTextRetriever()
 #print(retriever.get_article_text())
 
 daydate = date.today() - timedelta(1)
-print(retriever.get_url(daydate,11))
+#print(retriever.get_url(daydate,11))
 
+for i in range(20):
+    name = str(i).zfill(3)
+    name = 'pokus/test_' + name
+    
