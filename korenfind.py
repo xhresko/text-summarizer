@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-word_groups = set() # vysledna mnozina mnozin slov s rovnakym zaciatkom 
+word_groups = dict() # vysledna mnozina mnozin slov s rovnakym zaciatkom 
   
 f = open("test.txt")  # TODO : nacitavanie suboru z parametru
 content = f.read()
@@ -22,7 +22,7 @@ used_words = set()
 for word in cleanset :
     #print(word)
     if(len(word)>3 and word not in used_words) :        
-        wordfamily = word.upper() + " - "
+        wordfamily =  ""
         matches = 0
         for other in cleanset :                          
             same_chars = 0
@@ -36,11 +36,16 @@ for word in cleanset :
                     same_chars += 1
                 else :
                     break
-            if same_chars > 3 and (max_len - same_chars) < 4 :
+            if same_chars > 4 and (max_len - same_chars) < 4 :
                 wordfamily = wordfamily + "," + other
                 matches += 1
                 used_words.add(other)
-        if matches > 2 :
-            print(wordfamily)
+        if matches > 1 :
+            print(word[:4].upper())
+            print(wordfamily)            
 
+            word_groups.update({word[:4] : wordfamily })
+
+def create_word_groups(word_bag) :
+    """ Return 'word groups' - dictionary that contains """
 
