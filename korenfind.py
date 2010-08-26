@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 import re
 
-f = open("test.txt")
-
+word_groups = set() # vysledna mnozina mnozin slov s rovnakym zaciatkom 
+  
+f = open("test.txt")  # TODO : nacitavanie suboru z parametru
 content = f.read()
-content = content.lower()
-content = re.sub("[^a-ž]+", " ", content)
+content = content.lower()                 # naformatujeme vsetko do lowercase
+content = re.sub("[^a-ž]+", " ", content) # a vyberieme iba text
 
-wordlist = content.split(" ")
-cleanset = set()
+wordlist = content.split(" ") 
 
-for word in wordlist :
+cleanset = set() # cisty zoznam slov
+
+
+for word in wordlist : # slova v zozname sa oholia
     cleanset.add(word.strip())
 
 used_words = set()
@@ -39,14 +42,5 @@ for word in cleanset :
                 used_words.add(other)
         if matches > 2 :
             print(wordfamily)
-
-
-
-
-
-
-
-            
-
 
 
