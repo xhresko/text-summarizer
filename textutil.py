@@ -5,12 +5,12 @@ import re
 f = open("test.txt")
 #print(f.read())
 content = f.read()
-content = content.lower()
-content = re.sub("[^a-ž]+", " ", content)
+vert = content.lower()
+vert = re.sub("[^a-ž]+", " ", vert)
 #print(content)
-wordlist = content.split(" ")
+wordlist = vert.split(" ")
 
-dictionary = {"a":0}
+dictionary = dict()
 #print(wordlist[4])
 for word in wordlist :
   if word not in dictionary :
@@ -36,3 +36,9 @@ for item in sortlist :
     print (item)
 
 
+sentences = content.split(".")
+#print(sentences[3])
+
+for sentence in sentences :
+  print(sentence)
+#print(muflon)

@@ -68,11 +68,11 @@ class LNTextRetriever:
 retriever = LNTextRetriever()
 #print(retriever.get_article_text())
 
-daydate = date.today() - timedelta(3)
+daydate = date.today() - timedelta(1)
 #print(retriever.get_url(daydate,11))
 
-for i in range(170,180) :
+for i in range(1,30) :
     name = str(i).zfill(3)
-    name = './streda/test' + name
+    name = './sobota/test' + name
     retriever.get_article_text(retriever.get_url(daydate,i),name)
     

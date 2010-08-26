@@ -1,3 +1,4 @@
+<<<<<<< HEAD:test.txt
 Poslední vývoj v zemi cedru není příliš povzbudivý. Léta občanské války
 rozvrátila zemi, která se kdysi nazývala Švýcarskem Blízkého východu a udělala
 z ni bojiště cizích a mnohdy velmi vzdálených mocností. Ačkoli Libanon dosáhl
