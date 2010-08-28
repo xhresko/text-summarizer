@@ -63,11 +63,7 @@ def create_word_groups(text) :
             matches = 0
             for other in cleanset :
                 same_chars = 0
-                min_len = len(other)
-                max_len = len(word)
-                if len(word) <= len(other) :
-                    min_len = len(word)
-                    max_len = len(other)
+                (min_len,max_len) = (len(word),len(other)) if len(word) <= len(other) else (len(other),len(word))
                 for x in range(0,min_len) :
                     if word[x] == other[x] :
                         same_chars += 1
@@ -82,12 +78,52 @@ def create_word_groups(text) :
 
     return word_groups
 
+def group_words(text) :
+    """ Vrati slova zoskupene podla prvych pismen """
+
+    word_bag = get_word_bag(text)
+
+    cleanset = set() # cisty zoznam slov
+    used_words = set()
+    word_groups = list()
+
+    for word in word_bag : # slova sa zjednotia v mnozine
+        cleanset.add(word.strip())
+
+    for word in cleanset :
+        if word not in used_words :
+            wordfamily = list()
+            wordfamily.append(word)
+            if(len(word)>3) :
+                used_words.add(word)
+                for other in cleanset :
+                    if other not in used_words :
+                        same_chars = 0
+                        (min_len,max_len) = (len(word),len(other)) if len(word) <= len(other) else (len(other),len(word))
+                        for x in range(0,min_len) :
+                            if word[x] == other[x] :
+                                same_chars += 1
+                            else :
+                                break
+                        if same_chars > 4 and (max_len - same_chars) < 6 :
+                            wordfamily.append(other)
+                            used_words.add(other)
+            word_groups.append(wordfamily)
+    return word_groups
+
+
+
 f = open("test.txt")
 content = f.read()
 get_sentences(content)
 get_text_stats(content)
 
-word_groups = create_word_groups(content)
-
+word_groups = group_words(content)
+word_bag = get_word_bag(content)
 for group in word_groups :
-    print(group)
+    occur = 0
+    for word in group :
+        occur += word_bag.count(word)
+    if(occur>5 and len(group[0]) > 4) :
+        print(group)
+        print(occur)
