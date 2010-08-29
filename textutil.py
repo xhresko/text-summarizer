@@ -2,6 +2,22 @@
 # -*- coding: utf-8 -*-
 import re
 
+class RatedWordgroup:
+    
+    def __init__(self,wordgroup,rating):
+        self.wordgroup = wordgroup
+        self.rating = rating
+
+    def __str__(self):
+        result = str(self.wordgroup) +" - " + str(self.rating)        
+        return result
+    
+    def __eq__(self,other):
+        return self.wordgroup.eq(other.wordgroup) and self.rating.eq(other.rating)
+
+    def __hash__(self):
+        return hash(self.__str__())
+        
 def get_text_stats(text) :
     """Vrati slovnik - obsahuje slova a pocet ich vyskytov"""
     dictionary = dict()
@@ -31,6 +47,7 @@ def get_word_bag(text) :
     word_bag = list()
     for word in wordlist :
         word_bag.append(word.strip())
+    print("The text contains " + str(len(word_bag)) + " words.")
     return word_bag
 
 def get_sentences(text,delimiter='.') :
@@ -40,6 +57,7 @@ def get_sentences(text,delimiter='.') :
     sentences = content.split(delimiter)
     #for sentence in sentences :
     #    print(sentence + "\n")
+    print("The text contains " + str(len(sentences)) + " sentences.")
     return sentences
 
 def create_word_groups(text) :
@@ -75,7 +93,7 @@ def create_word_groups(text) :
                     used_words.add(other)
             if matches > 1 :
                 word_groups.update({word[:4] : wordfamily })
-
+    print("The text contains " + str(len(word_groups)) + " word groups. (CWG)")
     return word_groups
 
 def group_words(text) :
@@ -109,8 +127,24 @@ def group_words(text) :
                             wordfamily.append(other)
                             used_words.add(other)
             word_groups.append(wordfamily)
+    print("The text contains " + str(len(word_groups)) + " word groups. (GW)")        
     return word_groups
 
+def get_wordlist_rate(text) :
+    word_groups = group_words(content)
+    word_bag = get_word_bag(content)
+    rated_word_set = set()
+    for group in word_groups :
+        occur = 0
+        for word in group :
+            occur += word_bag.count(word)
+        rated_word_set.add(RatedWordgroup(group,occur))
+        #if(occur>5 and len(group[0]) > 4) :
+        #    print(group)
+        #    print(occur)        
+    for rwg in rated_word_set:
+        if rwg.rating > 1 :
+            print(rwg)
 
 
 f = open("test.txt")
@@ -118,12 +152,4 @@ content = f.read()
 get_sentences(content)
 get_text_stats(content)
 
-word_groups = group_words(content)
-word_bag = get_word_bag(content)
-for group in word_groups :
-    occur = 0
-    for word in group :
-        occur += word_bag.count(word)
-    if(occur>5 and len(group[0]) > 4) :
-        print(group)
-        print(occur)
+get_wordlist_rate(content)
