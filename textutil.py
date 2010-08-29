@@ -141,15 +141,38 @@ def get_wordlist_rate(text) :
         rated_word_set.add(RatedWordgroup(group,occur))
         #if(occur>5 and len(group[0]) > 4) :
         #    print(group)
-        #    print(occur)        
-    for rwg in rated_word_set:
-        if rwg.rating > 1 :
-            print(rwg)
+        #    print(occur)
+    #sort_wg = sorted(rated_word_set, key = lambda group : group.rating, reverse=True)
+    #for rwg in sort_wg:
+        #rwg = sort_wg[i]
+    #    if rwg.rating > 4 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
+    #        print(rwg)
+    return rated_word_set
 
+def rate_sentences(text) :
+    sentences = get_sentences(text)
+    wordlist = get_wordlist_rate(text)
+    rated = set()
+    topwords = set()
+    sort_wg = sorted(wordlist, key = lambda group : group.rating, reverse=True)
+    for rwg in sort_wg:        
+        if rwg.rating > 4 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
+            for word in rwg.wordgroup :
+                topwords.add(word)
 
+    for sentence in sentences :
+        rating = 0
+        for word in sentence.split(" ") :
+            if word.lower() in topwords :
+                rating += 1
+        rated.add((sentence, rating))
+        if rating > 1 :
+            print(rating)
+            print(sentence + ".")
+                
 f = open("test.txt")
 content = f.read()
-get_sentences(content)
-get_text_stats(content)
-
-get_wordlist_rate(content)
+#get_sentences(content)
+#get_text_stats(content)
+#get_wordlist_rate(content)
+rate_sentences(content)
