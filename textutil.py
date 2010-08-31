@@ -47,7 +47,7 @@ def get_word_bag(text) :
     word_bag = list()
     for word in wordlist :
         word_bag.append(word.strip())
-    print("The text contains " + str(len(word_bag)) + " words.")
+    #print("The text contains " + str(len(word_bag)) + " words.")
     return word_bag
 
 def get_sentences(text,delimiter='.') :
@@ -156,21 +156,26 @@ def rate_sentences(text) :
     topwords = set()
     sort_wg = sorted(wordlist, key = lambda group : group.rating, reverse=True)
     for rwg in sort_wg:        
-        if rwg.rating > 4 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
+        if rwg.rating > 3 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
+            weight = 1
+            weight += rwg.rating/2
+            weight += len(rwg.wordgroup[0])/3
+            weight += len(rwg.wordgroup)/2
             for word in rwg.wordgroup :
-                topwords.add(word)
-
+                topwords.add((word, weight))
+    print(topwords)
     for sentence in sentences :
         rating = 0
-        for word in sentence.split(" ") :
-            if word.lower() in topwords :
-                rating += 1
+        for word in get_word_bag(sentence) :            
+            for record in topwords :
+                 if word.lower()==record[0]:
+                     rating += record[1]
         rated.add((sentence, rating))
-        if rating > 1 :
-            print(rating)
+        if rating > 20 :
+            #print(rating)
             print(sentence + ".")
                 
-f = open("test.txt")
+f = open("test03.txt")
 content = f.read()
 #get_sentences(content)
 #get_text_stats(content)
