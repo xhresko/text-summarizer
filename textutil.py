@@ -158,24 +158,28 @@ def rate_sentences(text) :
     for rwg in sort_wg:        
         if rwg.rating > 3 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
             weight = 1
-            weight += rwg.rating/2
+            weight += rwg.rating/4
             weight += len(rwg.wordgroup[0])/3
-            weight += len(rwg.wordgroup)/2
+            weight += len(rwg.wordgroup)/4
             for word in rwg.wordgroup :
                 topwords.add((word, weight))
     print(topwords)
     for sentence in sentences :
         rating = 0
-        for word in get_word_bag(sentence) :            
+        bag = get_word_bag(sentence)
+        for word in bag :            
             for record in topwords :
                  if word.lower()==record[0]:
                      rating += record[1]
+        rating += rating/len(bag)
         rated.add((sentence, rating))
-        if rating > 20 :
+        if rating > 30 :
             #print(rating)
             print(sentence + ".")
+            print(rating)
+            
                 
-f = open("test03.txt")
+f = open("test02.txt")
 content = f.read()
 #get_sentences(content)
 #get_text_stats(content)
