@@ -3,21 +3,21 @@
 import re
 
 class RatedWordgroup:
-    
+
     def __init__(self,wordgroup,rating):
         self.wordgroup = wordgroup
         self.rating = rating
 
     def __str__(self):
-        result = str(self.wordgroup) +" - " + str(self.rating)        
+        result = str(self.wordgroup) +" - " + str(self.rating)
         return result
-    
+
     def __eq__(self,other):
         return self.wordgroup.eq(other.wordgroup) and self.rating.eq(other.rating)
 
     def __hash__(self):
         return hash(self.__str__())
-        
+
 def get_text_stats(text) :
     """Vrati slovnik - obsahuje slova a pocet ich vyskytov"""
     dictionary = dict()
@@ -54,7 +54,7 @@ def get_sentences(text,delimiter='.') :
     """Zo zadaneho textu vrati zoznam obsahujuci vety."""
     text = re.sub("\n", " ", text)
     text = re.sub("[ ]+", " ", text)
-    sentences = content.split(delimiter)
+    sentences = text.split(delimiter)
     #for sentence in sentences :
     #    print(sentence + "\n")
     print("The text contains " + str(len(sentences)) + " sentences.")
@@ -127,12 +127,12 @@ def group_words(text) :
                             wordfamily.append(other)
                             used_words.add(other)
             word_groups.append(wordfamily)
-    print("The text contains " + str(len(word_groups)) + " word groups. (GW)")        
+    print("The text contains " + str(len(word_groups)) + " word groups. (GW)")
     return word_groups
 
 def get_wordlist_rate(text) :
-    word_groups = group_words(content)
-    word_bag = get_word_bag(content)
+    word_groups = group_words(text)
+    word_bag = get_word_bag(text)
     rated_word_set = set()
     for group in word_groups :
         occur = 0
@@ -149,13 +149,14 @@ def get_wordlist_rate(text) :
     #        print(rwg)
     return rated_word_set
 
-def rate_sentences(text) :
+def rate_sentences(text,min_rating=30) :
+    result = str()
     sentences = get_sentences(text)
     wordlist = get_wordlist_rate(text)
     rated = set()
     topwords = set()
     sort_wg = sorted(wordlist, key = lambda group : group.rating, reverse=True)
-    for rwg in sort_wg:        
+    for rwg in sort_wg:
         if rwg.rating > 3 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
             weight = 1
             weight += rwg.rating/4
@@ -167,21 +168,22 @@ def rate_sentences(text) :
     for sentence in sentences :
         rating = 0
         bag = get_word_bag(sentence)
-        for word in bag :            
+        for word in bag :
             for record in topwords :
                  if word.lower()==record[0]:
                      rating += record[1]
         rating += rating/len(bag)
         rated.add((sentence, rating))
-        if rating > 30 :
+        if rating > min_rating :
             #print(rating)
+            result += sentence + "."
             print(sentence + ".")
             print(rating)
-            
-                
-f = open("test02.txt")
-content = f.read()
+    return result
+
+#f = open("test02.txt")
+#content = f.read()
 #get_sentences(content)
 #get_text_stats(content)
 #get_wordlist_rate(content)
-rate_sentences(content)
+#rate_sentences(content)
