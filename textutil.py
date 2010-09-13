@@ -225,7 +225,7 @@ def rate_sentences(text,percentage=20,min_rating=0) :
             unsorted_result.append(rs)
             counter += 1
  
-    sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=True)
+    sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=False)
     
     for rs in sort_result:
         result += rs.sentence + "."
