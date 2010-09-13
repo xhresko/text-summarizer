@@ -3,28 +3,40 @@ from textutil import *
 
 root = Tk()
 
-fram = Frame(root)
-Label(fram,text='Result percentage:').pack(side=LEFT)
-edit = Entry(fram)
+
+root.title("Text Summarizer")
+top_frame = Frame(root)
+Label(top_frame,text='Minimale rate of sentence:').pack(side=LEFT)
+edit = Entry(top_frame)
 edit.pack(side=LEFT, fill=BOTH, expand=1)
 edit.focus_set()
-butt = Button(fram, text='Summarize')
+butt = Button(top_frame, text='Summarize')
 butt.pack(side=RIGHT)
-fram.pack(side=TOP)
+top_frame.pack(side=TOP)
 
-summary = Text(root)
+
+center_frame = Frame(root)
+center_frame.pack(side=TOP)
+original = Text(center_frame)
+original.insert('1.0','''Put some text here ...''')
+original.pack(side=TOP)
+
+summary = Text(center_frame)
 summary.insert('1.0','''''')
 summary.pack(side=BOTTOM)
-original = Text(root)
-original.insert('1.0','''Vlozte text ...''')
-original.pack(side=BOTTOM)
+
 
 def summarize():
     if edit.get()=='' :
         percentage = 1
     else :
         percentage = int(edit.get())
-    result = rate_sentences(original.get('1.0','end'), percentage)
+
+    orig_text = original.get('1.0','end')
+    result = rate_sentences(orig_text, percentage)
+
+    sent_num.set('Sentences :' + (str(len(get_sentences(orig_text)))))
+
     summary.delete('1.0','end')
     summary.insert('1.0',str(result))
 
