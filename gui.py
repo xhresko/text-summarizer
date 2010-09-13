@@ -6,7 +6,7 @@ root = Tk()
 
 root.title("Text Summarizer")
 top_frame = Frame(root)
-Label(top_frame,text='Minimale rate of sentence:').pack(side=LEFT)
+Label(top_frame,text='Size of summary in % :').pack(side=LEFT)
 edit = Entry(top_frame)
 edit.pack(side=LEFT, fill=BOTH, expand=1)
 edit.focus_set()
@@ -35,7 +35,6 @@ def summarize():
     orig_text = original.get('1.0','end')
     result = rate_sentences(orig_text, percentage)
 
-    sent_num.set('Sentences :' + (str(len(get_sentences(orig_text)))))
 
     summary.delete('1.0','end')
     summary.insert('1.0',str(result))

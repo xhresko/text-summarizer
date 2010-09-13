@@ -18,6 +18,23 @@ class RatedWordgroup:
     def __hash__(self):
         return hash(self.__str__())
 
+class RatedSentence:
+
+    def __init__(self,position,sentence,rating):
+        self.position = position
+        self.sentence = sentence
+        self.rating = rating
+
+    def __str__(self):
+        result = "(" + str(self.position) +") (" + str(self.rating) +") " + self.sentence
+        return result
+
+    def __eq__(self,other):
+        return self.position.eq(other.position) and self.sentence.eq(other.sentence) and self.rating.eq(other.rating)
+
+    def __hash__(self):
+        return hash(self.rating)
+    
 def get_text_stats(text) :
     """Vrati slovnik - obsahuje slova a pocet ich vyskytov"""
     dictionary = dict()
@@ -149,11 +166,11 @@ def get_wordlist_rate(text) :
     #        print(rwg)
     return rated_word_set
 
-def rate_sentences(text,min_rating=30) :
+def rate_sentences(text,percentage=20,min_rating=0) :
     result = str()
     sentences = get_sentences(text)
     wordlist = get_wordlist_rate(text)
-    rated = set()
+    rated = list()
     topwords = set()
     sort_wg = sorted(wordlist, key = lambda group : group.rating, reverse=True)
     for rwg in sort_wg:
@@ -165,20 +182,54 @@ def rate_sentences(text,min_rating=30) :
             for word in rwg.wordgroup :
                 topwords.add((word, weight))
     print(topwords)
+    position = 0
     for sentence in sentences :
         rating = 0
+        position += 1
         bag = get_word_bag(sentence)
         for word in bag :
             for record in topwords :
                  if word.lower()==record[0]:
                      rating += record[1]
-        rating += rating/len(bag)
-        rated.add((sentence, rating))
-        if rating > min_rating :
+        rating = rating/(len(bag)/7)
+        
+        rated_sentence = RatedSentence(position, sentence, rating)
+        
+        rated.append(rated_sentence)      
+        
+        #if rating > min_rating :
             #print(rating)
-            result += sentence + "."
-            print(sentence + ".")
-            print(rating)
+            #result += sentence + "."
+            #print(str(position) + " " + sentence + ".")
+            #print(rating)
+    for rs in rated:
+        print(rs)
+        
+    sort_sentences = sorted(rated, key = lambda sen : sen.rating, reverse=True)
+        
+    for rs in sort_sentences:
+        print(rs)
+    
+    num_of_sen = int((len(sentences) / 100.0) * percentage) 
+    
+    print("Percentage :" + str(percentage))
+    print("Num. of sentences :" + str(num_of_sen))
+    
+    unsorted_result = list()
+    
+    counter = 0
+    for rs in sort_sentences:
+        if(counter>num_of_sen):
+            break
+        else:
+            unsorted_result.append(rs)
+            counter += 1
+ 
+    sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=True)
+    
+    for rs in sort_result:
+        result += rs.sentence + "."
+    
     return result
 
 #f = open("test02.txt")
