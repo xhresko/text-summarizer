@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import re
 
@@ -190,9 +190,9 @@ def rate_sentences(text,percentage=20,min_rating=0) :
         for word in bag :
             for record in topwords :
                  if word.lower()==record[0]:
-                     rating += record[1]
-        if len(bag)> 0 and rating > 0 :             
-            rating = rating/(len(bag)/7)
+                     rating += record[1]        
+        if(rating>0 and len(bag) > 0):             
+            rating = rating/((len(bag))/7)
         
         rated_sentence = RatedSentence(position, sentence, rating)
         
@@ -226,16 +226,25 @@ def rate_sentences(text,percentage=20,min_rating=0) :
             unsorted_result.append(rs)
             counter += 1
  
-    sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=True)
+    sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=False)
     
     for rs in sort_result:
         result += rs.sentence + "."
     
     return result
 
+<<<<<<< HEAD
 #f = open("test02.txt")
 #content = f.read()
 #get_sentences(content)
 #get_text_stats(content)
 #get_wordlist_rate(content)
 #rate_sentences(content)
+=======
+f = open("test02.txt")
+content = f.read()
+get_sentences(content)
+get_text_stats(content)
+get_wordlist_rate(content)
+rate_sentences(content)
+>>>>>>> d515c9d7b8aaee796b61cd70a60f4b988f5c0182
