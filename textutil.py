@@ -191,7 +191,8 @@ def rate_sentences(text,percentage=20,min_rating=0) :
             for record in topwords :
                  if word.lower()==record[0]:
                      rating += record[1]
-        rating = rating/(len(bag)/7)
+        if len(bag)> 0 and rating > 0 :             
+            rating = rating/(len(bag)/7)
         
         rated_sentence = RatedSentence(position, sentence, rating)
         
