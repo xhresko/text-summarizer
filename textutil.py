@@ -119,9 +119,10 @@ def rate_sentences(text,percentage=20,verbose=True) :
     topwords = list()
     sort_wg = sorted(wordlist, key = lambda group : group.rating, reverse=True)
     for rwg in sort_wg:
-        if rwg.rating > 3 and len(rwg.wordgroup[0]) > 4 and len(rwg.wordgroup) > 1:
+        if rwg.rating > 1 and len(rwg.wordgroup[0]) > 4 :
+          #and len(rwg.wordgroup) > 1:
             weight = 1
-            weight += rwg.rating/4
+            weight += rwg.rating/2
             weight += len(rwg.wordgroup[0])/2
             weight += len(rwg.wordgroup)/1
             for word in rwg.wordgroup :
@@ -139,14 +140,14 @@ def rate_sentences(text,percentage=20,verbose=True) :
         for word in bag :
             for record in topwords :
                  if word.lower()==record[1]:
-                     rating += record[0]        
-        if(rating>0 and len(bag) > 0):             
+                     rating += record[0]
+        if(rating>0 and len(bag) > 0):
             rating = rating/((len(bag))/7)
-        
+
         rated_sentence = RatedSentence(position, sentence, rating)
-        
-        rated.append(rated_sentence)      
-        
+
+        rated.append(rated_sentence)
+
         #if rating > min_rating :
             #print(rating)
             #result += sentence + "."
@@ -154,19 +155,19 @@ def rate_sentences(text,percentage=20,verbose=True) :
             #print(rating)
     #for rs in rated:
     #    print(rs)
-        
+
     sort_sentences = sorted(rated, key = lambda sen : sen.rating, reverse=True)
-        
+
     for rs in sort_sentences:
         print(rs)
-    
-    num_of_sen = int((len(sentences) / 100.0) * percentage) 
-    
+
+    num_of_sen = int((len(sentences) / 100.0) * percentage)
+
     print("Percentage :" + str(percentage))
     print("Num. of sentences :" + str(num_of_sen))
-    
+
     unsorted_result = list()
-    
+
     counter = 0
     for rs in sort_sentences:
         if(counter>num_of_sen):
@@ -174,12 +175,12 @@ def rate_sentences(text,percentage=20,verbose=True) :
         else:
             unsorted_result.append(rs)
             counter += 1
- 
+
     sort_result = sorted(unsorted_result, key = lambda sen : sen.position, reverse=False)
-    
+
     for rs in sort_result:
         result += rs.sentence + "."
-    
+
     return result
 
 #f = open("test02.txt")
